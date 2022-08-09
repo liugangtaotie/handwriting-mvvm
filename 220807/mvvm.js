@@ -3,7 +3,7 @@
  * @Author: liugang
  * @Date: 2022-08-07 11:46:28
  * @LastEditors: liugang
- * @LastEditTime: 2022-08-07 13:12:10
+ * @LastEditTime: 2022-08-09 09:29:06
  */
 
 class Vue {
@@ -27,7 +27,7 @@ class Compiler {
     this.$el = this.isNodeElement(el) ? el : document.querySelector(el)
     this.vm = vm
 
-    // 将节点放入内存
+    // 将节点放入内存,避免重绘
     const fragment = this.node2fragment(this.$el)
 
     // 核心编译模块
@@ -60,7 +60,7 @@ class Compiler {
   // 编译element
   compilerElement(node) {
     const attributes = node.attributes
-    ;[...attributes].forEach((attrs) => {
+    Array.from(attributes).forEach((attrs) => {
       const { name, value: expr } = attrs
       if (this.isDirection(name)) {
         const [, arg] = name.split('v-')
@@ -80,7 +80,7 @@ class Compiler {
   // 核心编译模块
   compiler(node) {
     const childNodes = node.childNodes
-    ;[...childNodes].forEach((child) => {
+    Array.from(childNodes).forEach((child) => {
       // 判断是text element
       if (this.isNodeElement(child)) {
         this.compilerElement(child)
